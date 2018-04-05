@@ -3,17 +3,31 @@
     <div class="jumbotron">
         <h1>Bem vindo ao <span class="zf-green">WebTv</span></h1>
         <div class='row'>
-            <div class='col-sm-12 col-md-6'>
+            <div id='teacher-access' class='col-sm-12 col-md-6'>
                 <div class='panel panel-default'>
                     <div class='panel-title'>
                         <h3 class='panel-heading'>Entrar como Professor</h3>
                     </div> 
-                    <div class='panel-body' align='center'>
-                        <?= session_id();?>
-                        <a id='btn-join-as-teacher' class='btn btn-success'>Entrar</a>
+                    <div class='panel-body'>
+                        <div align='center'>
+                            <i class='fa fa-user'></i>Teste
+                        </div>
+                        <div class='form-group'>
+                            <form action='#'>
+                                <label for='materia'><i class='fa fa-book'></i> Matéria:</label>
+                                <input id='materia' name='materia' class='form-control' type='text' placeholder='Matéria' autocomplete="off" require />
+                                <br />
+                                <label for='assunto'><i class='fa fa-tag'></i> Assunto:</label>
+                                <input id='assunto' name='assunto' class='form-control' type='text' placeholder='Assunto da aula' autocomplete="off" require />
+                            </form>
+                        </div>
+                        <div align='center'>
+                            <a id='btn-join-as-teacher' class='btn btn-success'>Entrar</a>
+                        </div>
                     </div>
                 </div>
             </div>
+            <!--
             <div class='col-sm-12 col-md-6'>
                 <div class='panel panel-default'>
                     <div class='panel-title'>
@@ -25,11 +39,21 @@
                     </div>
                 </div>
             </div>
-            <div id='teacher-video'>
+            -->
+            <!--Video Panel-->
+            <div class='row'>
+                <div class='col-sm-12'>
+                    <div id='main-video' class='inroom mainView'>
+                        <!--Main video here-->
+                    </div>
+                    <div id='class-video' class='inroom otherView'>
+                        <!--Other video here-->
+                    </div>
+                </div>
             </div>
-            <div id='class-video'>
-            </div>
+            
         </div>
     </div>
+
 </main>
 
