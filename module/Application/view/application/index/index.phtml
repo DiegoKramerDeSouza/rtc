@@ -1,0 +1,35 @@
+
+<main>
+    <div class="jumbotron">
+        <h1>Bem vindo ao <span class="zf-green">WebTv</span></h1>
+        <div class='row'>
+            <div class='col-sm-12 col-md-6'>
+                <div class='panel panel-default'>
+                    <div class='panel-title'>
+                        <h3 class='panel-heading'>Entrar como Professor</h3>
+                    </div> 
+                    <div class='panel-body' align='center'>
+                        <?= session_id();?>
+                        <a id='btn-join-as-teacher' class='btn btn-success'>Entrar</a>
+                    </div>
+                </div>
+            </div>
+            <div class='col-sm-12 col-md-6'>
+                <div class='panel panel-default'>
+                    <div class='panel-title'>
+                        <h3 class='panel-heading'>Acessar Sala de Aula</h3>
+                    </div> 
+                    <div class='panel-body' align='center'>
+                        
+                        <a id='btn-join-as-class' class='btn btn-success'>Entrar</a>
+                    </div>
+                </div>
+            </div>
+            <div id='teacher-video'>
+            </div>
+            <div id='class-video'>
+            </div>
+        </div>
+    </div>
+</main>
+
