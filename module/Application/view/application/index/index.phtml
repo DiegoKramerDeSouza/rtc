@@ -3,14 +3,11 @@
     <div class="jumbotron">
         <h1>Bem vindo ao <span class="zf-green">WebTv</span></h1>
         <div class='row'>
-            <div id='teacher-access' class='col-sm-12 col-md-6'>
-                <div class='panel panel-default bg-light'>
-                    <div class='panel-title'>
-                        <h3 class='panel-heading'>Criar sala de aula</h3>
-                    </div> 
-                    <div class='panel-body'>
-                        <div align='center'>
-                            <i class='fa fa-user-plus'></i>Teste
+            <div id='teacher-access' class='col-sm-12 col-md-6 offset-md-3'>
+                <div class='card bg-light'>
+                    <div class='card-body'>
+                        <div class='card-title'>
+                            <h3 class='panel-heading'>Criar sala de aula</h3>
                         </div>
                         <div class='form-group'>
                             <form action='#'>
@@ -19,39 +16,50 @@
                                 <br />
                                 <label for='assunto'><i class='fa fa-tag'></i> Assunto:</label>
                                 <input id='assunto' name='assunto' class='form-control' type='text' placeholder='Assunto da aula' autocomplete="off" require />
+                                <input type='hidden' name='room-id' id='room-id' />
                             </form>
                         </div>
-                        <div align='center'>
-                            <a id='btn-join-as-teacher' class='btn btn-success'>Entrar</a>
+                        <div class='text-center'>
+                            <a id='btn-join-as-teacher' class='btn btn-success'>Criar Sala</a>
                         </div>
                     </div>
                 </div>
             </div>
-            <!--
-            <div class='col-sm-12 col-md-6'>
-                <div class='panel panel-default'>
-                    <div class='panel-title'>
-                        <h3 class='panel-heading'>Acessar Sala de Aula</h3>
-                    </div> 
-                    <div class='panel-body' align='center'>
-                        
-                        <a id='btn-join-as-class' class='btn btn-success'>Entrar</a>
-                    </div>
-                </div>
+            <div id='public-conference' class='col-sm-12'>
+                <ol id="public-rooms" style="text-align:left;">
+                    <!--Room list-->
+                </ol>
             </div>
-            -->
+        </div>
+        <div class='row'>
             <!--Video Panel-->
-            <div class='row'>
+            <div id='video-panel' class='d-none'>
+                <div class='hidden-panel'>
+                    <input type='hidden' id='connected-class' />
+                    <input type='hidden' id='connected-content' />
+                </div>
                 <div class='col-sm-12'>
-                    <div id='main-video' class='inroom mainView'>
-                        <!--Main video here-->
-                    </div>
-                    <div id='class-video' class='inroom otherView'>
-                        <!--Other video here-->
+                    <div class='card'>
+                        <div id='class-title' class='card-header text-center'>
+                            <!--Class title here-->
+                        </div>
+                        <div class='card-body'>
+                            <div id='room-urls'>
+                                <!--Room definitions here-->
+                            </div>
+                            <div id='main-video' class='inroom mainView'>
+                                <!--Main video here-->
+                            </div>
+                            <div id='class-video' class='inroom otherView'>
+                                <!--Other video here-->
+                            </div>
+                        </div>
+                        <div id='teacher-name' class='card-footer text-center'>
+                            <!--Teacher name here-->
+                        </div>
                     </div>
                 </div>
-            </div>
-            
+            </div> 
         </div>
     </div>
 
