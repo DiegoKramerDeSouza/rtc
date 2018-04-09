@@ -165,7 +165,8 @@ $(document).ready(function() {
                     divClose.appendChild(button);
                 });
             } else {
-
+                var divOpen = document.createElement('div');
+                publicRoomsDiv.appendChild(divOpen);
             }
 
             setTimeout(looper, 3000);
