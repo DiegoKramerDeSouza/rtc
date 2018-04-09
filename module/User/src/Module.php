@@ -5,14 +5,14 @@
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
 
-namespace Application;
+namespace User;
 
 use Zend\Db\Adapter\AdapterInterface;
 use Zend\Db\TableGateway\TableGateway;
 use Zend\Db\ResultSet\ResultSet;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 
-class Module implements ConfigProviderInterface
+class Module
 {
     const VERSION = '3.0.3-dev';
 
@@ -20,7 +20,7 @@ class Module implements ConfigProviderInterface
     {
         return include __DIR__ . '/../config/module.config.php';
     }
-    
+
     public function getServiceConfig()
     {
         return [
@@ -50,4 +50,5 @@ class Module implements ConfigProviderInterface
               ]
           ];
     }
+
 }

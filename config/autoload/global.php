@@ -12,10 +12,5 @@
  */
 
 return [
-    'db' => [
-        'driver' => 'Pdo',
-        'dsn' => 'mysql:dbname=webtv;host=localhost;charset=utf8',
-        'username' => 'diegokramer',
-        'password' => 'webTVr00t!'
-    ],
+    //
 ];

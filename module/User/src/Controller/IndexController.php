@@ -5,16 +5,23 @@
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
 
-namespace Classroom\Controller;
+namespace User\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
 class IndexController extends AbstractActionController
 {
+    protected $table;
+    public function __construct($table)
+    {
+       $this->table = $table;
+    }
+
     public function indexAction()
     {
-        $form = new \Classroom\Form\Add();
+        //return new ViewModel();
+        $form = new \User\Form\Add();
 
         if($this->request->isPost()){
             $form->setData($this->request->getPost());
@@ -26,17 +33,5 @@ class IndexController extends AbstractActionController
             'form' => $form
         ]);
     }
-    public function addroomAction(){
-        $form = new \Classroom\Form\Add();
-
-        if($this->request->isPost()){
-            $form->setData($this->request->getPost());
-            
-            //Data here
-        }
-
-        return new viewModel([
-            'form' => $form
-        ]);
-    }
+    
 }

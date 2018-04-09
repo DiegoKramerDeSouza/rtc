@@ -34,7 +34,7 @@
                 <div class="container">
                     <div class="navbar-header">
                         <a class="navbar-brand" href="<?= $this->url('home') ?>">
-                            WebTv
+                            <span class='zf-green'>WebTv</span>
                         </a>
                     </div>
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
@@ -48,6 +48,9 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="<?= $this->url('classroom') ?>">Sala de Aula</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="<?= $this->url('user') ?>">Cadastro</a>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -60,7 +63,7 @@
         <div class="container">
             <?= $this->content ?>
             <footer class='navbar navbar-dark bg-dark fixed-bottom text-light'>
-                <p>WebTv &copy; <?= date('Y') ?> Intelit - Todos os direitos reservados.</p>
+                <p><span class='zf-green'>WebTv</span> &copy; <?= date('Y') ?> Intelit - Todos os direitos reservados.</p>
             </footer>
         </div>
 

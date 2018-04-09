@@ -1,13 +1,85 @@
 
+<?php
+    $title = 'Criar sala de aula';
+    $this->headTitle($title);
+?>
 <main>
     <div class="jumbotron">
         <h1>Bem vindo ao <span class="zf-green">WebTv</span></h1>
-        <h2>Sala de aula:</h2>
-        <p>Crie uma nova sala de aula:</p>
-        <div class='text-center'>
-            <a href='<?= $this->url('add') ?>' class='btn btn-lg btn-info'>Nova sala</a>
+        <div class='row mt-4'>
+            <div id='opend-rooms' class='col-sm-12 col-md-6'>
+                <h5>Salas disponíveis</h5>
+                <hr>
+                <div id='public-conference'>
+                    <!--Salas disponíveis-->
+                </div>
+            </div>
+            <div id='teacher-access' class='col-sm-12 col-md-6'>
+                <div class='card bg-light'>
+                    <h5 class='card-header'>
+                        <i class='fa fa-desktop'></i> Nova sala de aula:
+                    </h5>
+                    <div class='card-body'>
+                        <div class='card-title'>
+                            <h3 class='panel-heading'><?php $this->escapeHtml($title) ?></h3>
+                        </div>
+                        <div class='form-group'>
+                            <?php
+                                $form->setAttribute('action', $this->url('classroom', ['action'=>'index']));
+                                $form->prepare();
+
+                                echo $this->form()->openTag($form);
+                                echo $this->formHidden($form->get('id'));
+                                echo "<i class='fa fa-book'></i> ";
+                                echo $this->formRow($form->get('materia'));
+                                echo '<br>';
+                                echo "<i class='fa fa-tag'></i> ";
+                                echo $this->formRow($form->get('aula'));
+                                echo '<br>';
+                            ?>
+                            <hr>
+                            <div class='text-right'>
+                                <?php
+                                    echo $this->formSubmit($form->get('submit'));
+                                    echo $this->form()->closeTag();
+                                ?>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class='row'>
+            <!--Video Panel-->
+            <div id='video-panel' class='d-none'>
+                <div class='hidden-panel'>
+                    <input type='hidden' id='connected-class' />
+                    <input type='hidden' id='connected-content' />
+                </div>
+                <div class='col-sm-12'>
+                    <div class='card'>
+                        <div id='class-title' class='card-header text-center'>
+                            <!--Class title here-->
+                        </div>
+                        <div class='card-body'>
+                            <div id='room-urls'>
+                                <!--Room definitions here-->
+                            </div>
+                            <div id='main-video' class='inroom mainView'>
+                                <!--Main video here-->
+                            </div>
+                            <div id='class-video' class='inroom otherView'>
+                                <!--Other video here-->
+                            </div>
+                        </div>
+                        <div id='teacher-name' class='card-footer text-center'>
+                            <!--Teacher name here-->
+                        </div>
+                    </div>
+                </div>
+            </div> 
         </div>
     </div>
 
 </main>
-

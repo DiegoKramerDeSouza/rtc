@@ -18,6 +18,11 @@ body {
     z-index: -1;
 }
 
+.classroom-img {
+    max-width: 80px;
+    max-height: 75px;
+}
+
 .noaction {
     cursor: pointer;
 }

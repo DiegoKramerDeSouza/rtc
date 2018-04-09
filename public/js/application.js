@@ -75,77 +75,99 @@ $(document).ready(function() {
         }
     }
 
-    var publicRoomsDiv = document.getElementById('public-rooms');
+    var publicRoomsDiv = document.getElementById('public-conference');
     (function looper() {
         //connection.getPublicModerators(startsWith, callback)
         connection.getPublicModerators(function(array) {
             publicRoomsDiv.innerHTML = '';
-            array.forEach(function(moderator) {
-                //Definições de moderador:
-                // moderator.userid
-                // moderator.extra
-                if (moderator.userid == connection.userid) {
-                    //Verifica se quem conecta é o próprio moderador
-                    return;
-                }
-
-                var labelRoom = moderator.userid;
-                labelRoom = atob(labelRoom);
-                var labelClasse = labelRoom.split('|')[0];
-                var labelMateria = labelRoom.split('|')[2];
-
-                var li = document.createElement('li');
-                li.innerHTML = '<b>' + labelClasse + '(' + labelMateria + ')</b>';
-
-                var item = document.getElementById('public-conference');
-                /*item.innerHTML = "<div class=\"media\">" +
-                    "<img class=\"mr-3\" src=\"<?= $this->basePath('img/classroom.jpg')?> \" alt=\"Sala de aula\">" +
-                    "<div class=\"media-body\">" +
-                    "<h5 class=\"mt-0\">" + labelClasse + "</h5>" +
-                    labelMateria +
-                    "<br/>";*/
-                //"</div>" +
-                //"</div>";
-
-                var button = document.createElement('button');
-                button.id = moderator.userid;
-                button.onclick = function() {
-                    this.disabled = true;
-                    var elem = document.getElementById(this.id);
-                    if (hasClass(elem, "btn-success")) {
-                        elem.classList.remove("btn-success");
-                        elem.classList.add("btn-default");
+            if (array.length > 0) {
+                array.forEach(function(moderator) {
+                    //Definições de moderador:
+                    // moderator.userid
+                    // moderator.extra
+                    if (moderator.userid == connection.userid) {
+                        //Verifica se quem conecta é o próprio moderador
+                        return;
                     }
-                    connection.classVideosContainer = document.getElementById('class-video');
-                    connection.join(this.id);
-                    //Definições de vídeo para quem acessa a sala
-                    connection.onstream = function(event) {
-                        console.log(event.type);
-                        var userVideo = document.createElement('video');
-                        userVideo.controls = false;
-                        if (event.type === 'local') {
-                            userVideo.muted = true;
+
+                    var labelRoom = moderator.userid;
+                    labelRoom = atob(labelRoom);
+                    var labelClasse = labelRoom.split('|')[0];
+                    var labelMateria = labelRoom.split('|')[2];
+
+                    var divOpen = document.createElement('div');
+                    var card = "<div class='card m-2'>" +
+                        "<h5 class='card-header'>" +
+                        "<i class='fa fa-desktop'></i> " + labelClasse +
+                        "</h5>" +
+                        "<div class='card-body'>" +
+                        "<div class='row'>" +
+                        "<div class='col-sm-12 col-md-3'>" +
+                        "<img class='mr-3 classroom-img' style='max-width:80px; max-height:75px;' src='img/classroom.png' alt='Sala de aula'>" +
+                        "</div>" +
+                        "<div class='col-sm-12 col-md-6'>" +
+                        "<h5 class='card-title'>" +
+                        "Assunto: " + labelMateria +
+                        "</h5>" +
+                        "<p class='card-text'>Acesse esta sala de aula clicando no botão ao lado.</p>" +
+                        "</div>" +
+                        "<div id=" + moderator.userid + " class='col-sm-12 col-md-3 text-center'>" +
+                        "</div>" +
+                        "</div>" +
+                        "</div>";
+
+                    divOpen.innerHTML = card;
+
+                    var button = document.createElement('button');
+                    button.id = moderator.userid;
+                    button.className = 'btn btn-info';
+                    button.onclick = function() {
+                        this.disabled = true;
+                        var elem = document.getElementById(this.id);
+                        if (hasClass(elem, "btn-info")) {
+                            elem.classList.remove("btn-info");
+                            elem.classList.add("btn-default");
                         }
-                        userVideo.srcObject = event.stream;
-                        var width = parseInt(connection.classVideosContainer.clientWidth / 2) - 20;
-                        var mediaElement = getHTMLMediaElement(userVideo, {
-                            //title: 'Classe',
-                            buttons: ['full-screen'],
-                            width: width,
-                            showOnMouseEnter: false
-                        });
-                        callTeacherStream();
-                        connection.classVideosContainer.appendChild(mediaElement);
+                        connection.classVideosContainer = document.getElementById('class-video');
+                        connection.join(this.id);
+                        //Definições de vídeo para quem acessa a sala
+                        connection.onstream = function(event) {
+                            console.log(event.type);
+                            var userVideo = document.createElement('video');
+                            userVideo.controls = false;
+                            if (event.type === 'local') {
+                                userVideo.muted = true;
+                            }
+                            userVideo.srcObject = event.stream;
+                            var width = parseInt(connection.classVideosContainer.clientWidth / 2) - 20;
+                            var mediaElement = getHTMLMediaElement(userVideo, {
+                                //title: 'Classe',
+                                buttons: ['full-screen'],
+                                width: width,
+                                showOnMouseEnter: false
+                            });
+                            callTeacherStream();
+                            connection.classVideosContainer.appendChild(mediaElement);
+                            setRoomLabel(labelClasse + " (" + labelMateria + ")");
+                        };
                     };
-                };
-                button.innerHTML = 'Entrar na sala';
-                li.appendChild(button);
-                if (moderator.userid == connection.sessionid) {
-                    // Se já estiver conectado na sala
-                    button.disabled = true;
-                }
-                publicRoomsDiv.insertBefore(li, publicRoomsDiv.firstChild);
-            });
+                    button.innerHTML = 'Entrar';
+                    if (moderator.userid == connection.sessionid) {
+                        // Se já estiver conectado na sala
+                        button.disabled = true;
+                    }
+                    //publicRoomsDiv.insertBefore(li, publicRoomsDiv.firstChild);
+                    //publicRoomsDiv.insertBefore(divOpen, publicRoomsDiv.firstChild);
+
+                    publicRoomsDiv.appendChild(divOpen);
+
+                    var divClose = document.getElementById(moderator.userid);
+                    divClose.appendChild(button);
+                });
+            } else {
+
+            }
+
             setTimeout(looper, 3000);
         });
     })();
@@ -215,6 +237,7 @@ function setStatus(st) {
 //
 function callTeacherStream() {
     $('#teacher-access').slideUp(300);
+    $('#opend-rooms').slideUp(300);
     var videoPanel = document.getElementById('video-panel');
     videoPanel.classList.remove("d-none");
 }

@@ -21,4 +21,5 @@ return [
     'ZendDeveloperTools',
     'Application',
     'Classroom',
+    'User',
 ];
