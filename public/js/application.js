@@ -59,6 +59,7 @@ $(document).ready(function() {
                     video.muted = true;
                 }
                 video.srcObject = event.stream;
+                console.log(video.srcObject);
                 var width = parseInt(connection.teacherVideosContainer.clientWidth / 2) - 20;
                 var mediaElement = getHTMLMediaElement(video, {
                     //    title: roomLabel,
@@ -132,20 +133,35 @@ $(document).ready(function() {
                         connection.join(this.id);
                         //Definições de vídeo para quem acessa a sala
                         connection.onstream = function(event) {
-                            console.log(event.type);
+                            console.log("Connect: " + event.type);
                             var userVideo = document.createElement('video');
                             userVideo.controls = false;
+                            //Define se a conexão é local ou remota
                             if (event.type === 'local') {
                                 userVideo.muted = true;
+                                userVideo.srcObject = event.stream;
+                                console.log(userVideo.srcObject);
+                                console.log(moderator.userid);
+                                var width = parseInt(connection.classVideosContainer.clientWidth / 2) - 20;
+                                var mediaElement = getHTMLMediaElement(userVideo, {
+                                    title: 'Minha Cam',
+                                    buttons: ['full-screen'],
+                                    width: width,
+                                    showOnMouseEnter: false
+                                });
+                            } else {
+                                userVideo.srcObject = event.stream;
+                                console.log(userVideo.srcObject.id);
+                                console.log(moderator.userid);
+                                var width = parseInt(connection.classVideosContainer.clientWidth / 2) - 20;
+                                var mediaElement = getHTMLMediaElement(userVideo, {
+                                    title: labelClasse + " (" + labelMateria + ")",
+                                    buttons: ['full-screen'],
+                                    width: width,
+                                    showOnMouseEnter: false
+                                });
                             }
-                            userVideo.srcObject = event.stream;
-                            var width = parseInt(connection.classVideosContainer.clientWidth / 2) - 20;
-                            var mediaElement = getHTMLMediaElement(userVideo, {
-                                //title: 'Classe',
-                                buttons: ['full-screen'],
-                                width: width,
-                                showOnMouseEnter: false
-                            });
+
                             callTeacherStream();
                             connection.classVideosContainer.appendChild(mediaElement);
                             setRoomLabel(labelClasse + " (" + labelMateria + ")");
@@ -158,7 +174,6 @@ $(document).ready(function() {
                     }
                     //publicRoomsDiv.insertBefore(li, publicRoomsDiv.firstChild);
                     //publicRoomsDiv.insertBefore(divOpen, publicRoomsDiv.firstChild);
-
                     publicRoomsDiv.appendChild(divOpen);
 
                     var divClose = document.getElementById(moderator.userid);
