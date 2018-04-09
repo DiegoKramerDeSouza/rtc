@@ -46,7 +46,7 @@
                                 <a class="nav-link" href="<?= $this->url('home') ?>"><i class='fa fa-home'></i> Home <span class="sr-only">(current)</span></a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">Link</a>
+                                <a class="nav-link" href="<?= $this->url('classroom') ?>">Sala de Aula</a>
                             </li>
                         </ul>
                     </div>
@@ -59,12 +59,8 @@
 
         <div class="container">
             <?= $this->content ?>
-            <hr>
-            <footer class='text-center text-light'>
-                <p>&copy;<?= date('Y') ?>;</p>
-            </footer>
             <footer class='navbar navbar-dark bg-dark fixed-bottom text-light'>
-                <p>WebTv</p>
+                <p>WebTv &copy; <?= date('Y') ?> Intelit - Todos os direitos reservados.</p>
             </footer>
         </div>
 

@@ -6,6 +6,7 @@ $(document).ready(function() {
     //Conexão com serviço de websocket
     //Servidor  de signaling gratúito https://rtcmulticonnection.herokuapp.com:443/
     connection.socketURL = 'https://rtcmulticonnection.herokuapp.com:443/';
+    //connection.socketURL = 'https://pinechart.com:3000/';
 
     //Definição de elementos da conferência; Audio e Video
     connection.session = {
