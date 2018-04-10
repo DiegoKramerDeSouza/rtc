@@ -29,7 +29,7 @@
                                 $form->prepare();
 
                                 echo $this->form()->openTag($form);
-                                echo $this->formHidden($form->get('id'));
+                                echo $this->formRow($form->get('id'));
                                 echo "<i class='fa fa-book'></i> ";
                                 echo $this->formRow($form->get('materia'));
                                 echo '<br>';
@@ -50,27 +50,28 @@
                 </div>
             </div>
         </div>
-        <div class='row'>
+        <div class=''>
             <!--Video Panel-->
-            <div id='video-panel' class='d-none'>
+            <div id='video-panel' class='row d-none'>
                 <div class='hidden-panel'>
                     <input type='hidden' id='connected-class' />
                     <input type='hidden' id='connected-content' />
                 </div>
-                <div class='col-sm-12'>
+                <div class='col-sm-12 col-md-8'>
                     <div class='card'>
                         <div id='class-title' class='card-header text-center'>
                             <!--Class title here-->
                         </div>
                         <div class='card-body'>
-                            <div id='room-urls'>
-                                <!--Room definitions here-->
-                            </div>
-                            <div id='main-video' class='inroom mainView'>
-                                <!--Main video here-->
-                            </div>
-                            <div id='class-video' class='inroom otherView'>
-                                <!--Other video here-->
+                            <div class='row'>
+                                <div class='col-sm-12'>
+                                    <div id='room-urls'>
+                                        <!--Room definitions here-->
+                                    </div>
+                                    <div id='main-video' class='inroom mainView'>
+                                        <!--Main video here-->
+                                    </div>
+                                </div>   
                             </div>
                         </div>
                         <div id='teacher-name' class='card-footer text-center'>
@@ -78,6 +79,11 @@
                         </div>
                     </div>
                 </div>
+                <div class='col-sm-12 col-md-4' style='display:block;'>
+                    <div id='class-video' class='inroom otherView'>
+                        <!--Other video here-->
+                    </div>
+                </div> 
             </div> 
         </div>
     </div>
