@@ -19,8 +19,16 @@ $(document).ready(function() {
     }
 
     document.getElementById('btn-join-as-teacher').onclick = function() {
-        //Definir 'your-room-id' - Formulário contendo hash de escola, professor, matéria e assunto
-        //Definição "title: 'Professor'" - Informativo de matéria e assunto
+        //Ação de criar uma sala de aula ao clicar em 'btn-join-as-teacher'
+        /*
+            var isPublicModerator
+            var elem
+            var materia
+            var assunto
+            var roomLabel
+            var roomId
+            var roomHash
+        */
         var isPublicModerator = true;
         var elem = document.getElementById(this.id);
         var materia = document.querySelector('#materia').value;
@@ -29,6 +37,7 @@ $(document).ready(function() {
         var roomId = Math.floor((Math.random() * 9999) + 0);
         var roomHash = btoa(materia + "|" + roomId + "|" + assunto);
 
+        //Verifica os campos materia e assunto, ambos devem ser informados
         if (materia && assunto) {
             this.disabled = true;
             materia.disabled = true;
@@ -38,12 +47,17 @@ $(document).ready(function() {
                 elem.classList.remove("btn-success");
                 elem.classList.add("btn-default");
             }
+            //Elementos do documento apontados
             connection.teacherVideosContainer = document.getElementById('main-video');
             connection.classVideosContainer = document.getElementById('class-video');
+            //Abertura da sala
             connection.open(roomHash, isPublicModerator);
+            //Início da transmissão
             connection.onstream = function(event) {
 
+                //Verifica se a conexão é local ou remota
                 if (event.type === 'local') {
+                    //As definições de conexão local para um usuário do tipo professor são definidas por padrão com alta prioridade
                     connection.teacherVideosContainer.appendChild(event.mediaElement);
                     event.mediaElement.play();
                     setTimeout(function() {
@@ -57,10 +71,10 @@ $(document).ready(function() {
                     showRoomURL(roomHash, materia, assunto);
                     setRoomLabel(roomLabel);
 
-
                     var width = parseInt(connection.teacherVideosContainer.clientWidth);
                     event.mediaElement.width = width;
                 } else {
+                    //Conexões efetuadas a partir de um ponto remoto recebem tratamento de entradas de vídeo comuns
                     connection.classVideosContainer.appendChild(event.mediaElement);
                     event.mediaElement.play();
                     setTimeout(function() {
@@ -79,6 +93,7 @@ $(document).ready(function() {
                 }
                 console.log(event.mediaElement.id);
 
+                //Método secundário para a criação de elementos de audio/vídeo
                 /*
                 var video = document.createElement('video');
                 video.controls = true;
@@ -95,7 +110,6 @@ $(document).ready(function() {
                     showOnMouseEnter: false
                 });
                 */
-
                 // connection.teacherVideosContainer.appendChild(mediaElement);
             }
         }
@@ -103,24 +117,35 @@ $(document).ready(function() {
 
     var publicRoomsDiv = document.getElementById('public-conference');
     (function looper() {
-        //connection.getPublicModerators(startsWith, callback)
+        //Verifica a existência de uma sala pública
         connection.getPublicModerators(function(array) {
             publicRoomsDiv.innerHTML = '';
+            //Se existir uma sala pública
             if (array.length > 0) {
                 array.forEach(function(moderator) {
                     //Definições de moderador:
-                    // moderator.userid
-                    // moderator.extra
+                    /*  moderator.userid
+                         moderator.extra
+                    */
                     if (moderator.userid == connection.userid) {
                         //Verifica se quem conecta é o próprio moderador
                         return;
                     }
-                    //console.log(moderator);
+                    //Cria labels para exibição de salas disponíveis
+                    /*
+                        var labelRoom
+                        var labelClasse
+                        var labelMateria
+                    */
                     var labelRoom = moderator.userid;
                     labelRoom = atob(labelRoom);
                     var labelClasse = labelRoom.split('|')[0];
                     var labelMateria = labelRoom.split('|')[2];
 
+                    //cria elemento div para exibição de salas disponíveis em bloco
+                    /*
+                        var card
+                    */
                     var divOpen = document.createElement('div');
                     var card = "<div class='card m-2'>" +
                         "<h5 class='card-header'>" +
@@ -186,11 +211,11 @@ $(document).ready(function() {
                                 setTimeout(function() {
                                     event.mediaElement.play();
                                 }, 5000);
-                                //event.mediaElement.elem = roomHash;
-                                document.getElementById('room-id').value = roomHash;
-
                                 var width = parseInt(connection.teacherVideosContainer.clientWidth);
                                 event.mediaElement.width = width;
+
+                                //event.mediaElement.elem = roomHash;
+                                //document.getElementById('room-id').value = roomHash;
 
                                 /*
                                 userVideo.srcObject = event.stream;
@@ -223,6 +248,10 @@ $(document).ready(function() {
                 });
             } else {
                 var divOpen = document.createElement('div');
+                var message = "<div class='light-bg text-center'>" +
+                    "<i class='fa fa-times fa-lg text-danger'></i> Não há salas de aula disponíveis." +
+                    "</div>";
+                divOpen.innerHTML = message;
                 publicRoomsDiv.appendChild(divOpen);
             }
             setTimeout(looper, 3000);
@@ -281,7 +310,7 @@ $(document).ready(function() {
 
 });
 
-//Funções-----------------------------------------------------------------
+//FUNCTIONS-----------------------------------------------------------------
 
 //Verificação de classes para elementos html
 function hasClass(element, cls) {
@@ -291,19 +320,31 @@ function hasClass(element, cls) {
 function setStatus(st) {
     status = st;
 }
-//
+//Exibição de campos de vídeo
+/*
+    var videoPanel
+*/
 function callTeacherStream() {
     $('#teacher-access').slideUp(300);
     $('#opend-rooms').slideUp(300);
     var videoPanel = document.getElementById('video-panel');
     videoPanel.classList.remove("d-none");
 }
-
+//Define label da sala acessada
+/*
+    var roomtitle
+*/
 function setRoomLabel(label) {
     var roomtitle = document.getElementById('class-title');
     roomtitle.innerHTML = label;
 }
-
+//Cria elementos com as definições da sala criada
+/*
+    var roomHashURL
+    var roomQueryStringURL
+    var html
+    var roomURLsDiv
+*/
 function showRoomURL(roomid, className, classTheme) {
     var roomHashURL = '#' + roomid;
     var roomQueryStringURL = '?roomid=' + roomid;

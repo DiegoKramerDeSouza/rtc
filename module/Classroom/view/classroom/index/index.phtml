@@ -29,7 +29,7 @@
                                 $form->prepare();
 
                                 echo $this->form()->openTag($form);
-                                echo $this->formRow($form->get('id'));
+                                echo $this->formHidden($form->get('id'));
                                 echo "<i class='fa fa-book'></i> ";
                                 echo $this->formRow($form->get('materia'));
                                 echo '<br>';

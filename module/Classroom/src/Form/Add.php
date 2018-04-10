@@ -9,7 +9,7 @@ Class Add extends Form {
         $this->setAttribute('method', 'POST');
         $this->add([
             'name' => 'id',
-            'type' => 'text',
+            'type' => 'hidden',
             'attributes' => [
                 'id' => 'room-id'
             ]
