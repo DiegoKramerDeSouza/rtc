@@ -8,6 +8,8 @@ $(document).ready(function() {
     connection.socketURL = 'https://rtcmulticonnection.herokuapp.com:443/';
     //connection.socketURL = 'https://pinechart.com:3000/';
 
+
+
     //Definição de elementos da conferência; Audio e Video
     connection.session = {
         audio: true,
@@ -34,7 +36,7 @@ $(document).ready(function() {
         var materia = document.querySelector('#materia').value;
         var assunto = document.querySelector('#assunto').value;
         var roomLabel = materia + " (" + assunto + ")";
-        var roomId = Math.floor((Math.random() * 9999) + 0);
+        var roomId = Math.floor((Math.random() * 999999) + 0);
         var roomHash = btoa(materia + "|" + roomId + "|" + assunto);
 
         //Verifica os campos materia e assunto, ambos devem ser informados
@@ -50,11 +52,11 @@ $(document).ready(function() {
             //Elementos do documento apontados
             connection.teacherVideosContainer = document.getElementById('main-video');
             connection.classVideosContainer = document.getElementById('class-video');
+
             //Abertura da sala
             connection.open(roomHash, isPublicModerator);
             //Início da transmissão
             connection.onstream = function(event) {
-
                 //Verifica se a conexão é local ou remota
                 if (event.type === 'local') {
                     //As definições de conexão local para um usuário do tipo professor são definidas por padrão com alta prioridade
@@ -64,6 +66,7 @@ $(document).ready(function() {
                         event.mediaElement.play();
                     }, 5000);
                     event.mediaElement.muted = true;
+                    event.mediaElement.owner = 'User';
                     //event.mediaElement.elem = roomHash;
                     document.getElementById('room-id').value = roomHash;
 
@@ -91,7 +94,9 @@ $(document).ready(function() {
                     var width = parseInt(connection.classVideosContainer.clientWidth);
                     event.mediaElement.width = width;
                 }
-                console.log(event.mediaElement.id);
+                console.log('Stream: ' + event.mediaElement.id);
+                connection.extra.modifiedValue = event.mediaElement.id;
+                connection.updateExtraData();
 
                 //Método secundário para a criação de elementos de audio/vídeo
                 /*
@@ -125,7 +130,7 @@ $(document).ready(function() {
                 array.forEach(function(moderator) {
                     //Definições de moderador:
                     /*  moderator.userid
-                         moderator.extra
+                        moderator.extra
                     */
                     if (moderator.userid == connection.userid) {
                         //Verifica se quem conecta é o próprio moderador
@@ -153,9 +158,6 @@ $(document).ready(function() {
                         "</h5>" +
                         "<div class='card-body'>" +
                         "<div class='row'>" +
-                        //"<div class='col-md-12 text-center'>" +
-                        //"<img class='mr-3 classroom-img' style='max-width:80px; max-height:75px;' src='img/classroom.png' alt='Sala de aula'>" +
-                        //"</div>" +
                         "<div class='col-sm-6 col-md-8 col-lg-9'>" +
                         "<h5 class='card-title'>" +
                         "Assunto: " + labelMateria +
@@ -173,6 +175,8 @@ $(document).ready(function() {
                     var button = document.createElement('button');
                     button.id = moderator.userid;
                     button.className = 'btn btn-info';
+
+                    console.log(connection.userid + "||" + connection.sessionid);
                     button.onclick = function() {
                         this.disabled = true;
                         var elem = document.getElementById(this.id);
@@ -183,18 +187,31 @@ $(document).ready(function() {
                         callTeacherStream();
                         connection.classVideosContainer = document.getElementById('class-video');
                         connection.teacherVideosContainer = document.getElementById('main-video');
+
                         connection.join(this.id);
                         //Definições de vídeo para quem acessa a sala
                         connection.onstream = function(event) {
-
+                            var owner = event.extra.modifiedValue;
                             var userVideo = document.createElement('video');
                             userVideo.controls = false;
 
-                            console.log(connection.sessionid);
+                            //console.log(event.extra);
+                            console.log(owner);
+                            console.log(event.mediaElement.id);
 
                             //Define se a conexão é local ou remota
                             if (event.type === 'local') {
                                 userVideo.muted = true;
+
+                                connection.classVideosContainer.appendChild(event.mediaElement);
+                                event.mediaElement.play();
+                                setTimeout(function() {
+                                    event.mediaElement.play();
+                                }, 5000);
+                                var width = parseInt(connection.classVideosContainer.clientWidth);
+                                event.mediaElement.width = width;
+
+                                /*
                                 userVideo.srcObject = event.stream;
                                 //console.log(userVideo.srcObject);
                                 var width = parseInt(connection.classVideosContainer.clientWidth);
@@ -205,18 +222,35 @@ $(document).ready(function() {
                                     showOnMouseEnter: false
                                 });
                                 connection.classVideosContainer.appendChild(mediaElement);
+                                */
+
                             } else {
-                                connection.teacherVideosContainer.appendChild(event.mediaElement);
-                                event.mediaElement.play();
-                                setTimeout(function() {
-                                    event.mediaElement.play();
-                                }, 5000);
-                                var width = parseInt(connection.teacherVideosContainer.clientWidth);
-                                event.mediaElement.width = width;
+                                console.log(owner + "||" + event.mediaElement.id);
+                                if (owner != undefined) {
+                                    if (owner == event.mediaElement.id) {
+                                        connection.teacherVideosContainer.appendChild(event.mediaElement);
+                                        event.mediaElement.play();
+                                        setTimeout(function() {
+                                            event.mediaElement.play();
+                                        }, 5000);
+                                        var width = parseInt(connection.teacherVideosContainer.clientWidth);
+                                        event.mediaElement.width = width;
+                                    } else {
+                                        connection.classVideosContainer.appendChild(event.mediaElement);
+                                        event.mediaElement.play();
+                                        setTimeout(function() {
+                                            event.mediaElement.play();
+                                        }, 5000);
+                                        var width = parseInt(connection.classVideosContainer.clientWidth);
+                                        event.mediaElement.width = width;
+                                    }
+                                }
+
 
                                 //event.mediaElement.elem = roomHash;
                                 //document.getElementById('room-id').value = roomHash;
 
+                                //Método secundário para a criação de elementos de audio/vídeo
                                 /*
                                 userVideo.srcObject = event.stream;
                                 //console.log(userVideo.srcObject);
