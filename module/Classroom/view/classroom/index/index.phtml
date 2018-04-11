@@ -5,12 +5,17 @@
 ?>
 <main>
     <div class="jumbotron">
-        <h1>Bem vindo ao <span class="zf-green">WebTv</span></h1>
         <div class='row mt-4'>
             <div id='opend-rooms' class='col-sm-12 col-md-6'>
-                <h5>Salas disponíveis</h5>
+                <h1>Bem vindo ao <span class="zf-green">WebTv</span></h1>
+                <h4>Salas disponíveis</h4>
                 <hr>
                 <div id='public-conference'>
+                    <div class="text-center zf-green mt-5">
+                        <div class="h6">Encontrando salas...</div>
+                        <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
+                        <span class="sr-only">Aguarde...</span>
+                    </div>
                     <!--Salas disponíveis-->
                 </div>
             </div>
@@ -53,37 +58,69 @@
         <div class=''>
             <!--Video Panel-->
             <div id='video-panel' class='row d-none'>
+                <!--Painel de Debug-->
                 <div class='hidden-panel'>
-                    <input type='hidden' id='connected-class' />
-                    <input type='hidden' id='connected-content' />
+                    <input type='hidden' id='connected-class' readonly />
+                    <input type='hidden' id='connected-content' readonly />
+                    <input type='hidden' id='current-user' value='User' readonly />
                 </div>
                 <div class='col-sm-12 col-md-8'>
+                    <!--Card de vídeo e chat-->
                     <div class='card'>
-                        <div id='class-title' class='card-header text-center'>
-                            <!--Class title here-->
+                        <div id='class-suptitle' class='card-header'>
+                            <i class="fa fa-circle zf-green"></i>
+                            <span id='class-title'>
+                                <!--Título da aula - Matéria (Assunto)-->
+                            </span>
                         </div>
                         <div class='card-body'>
                             <div class='row'>
                                 <div class='col-sm-12'>
                                     <div id='room-urls'>
-                                        <!--Room definitions here-->
+                                        <!--Definições da Sala-->
                                     </div>
                                     <div id='main-video' class='inroom mainView'>
-                                        <!--Main video here-->
+                                        <!--Vídeo principal-->
+                                        <div id='div-connect'>
+                                            <div class='h6 zf-green text-center'>
+                                                Conectando...
+                                            </div>
+                                            <div class="progress">
+                                                <div class="progress-bar bg-success progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="100" aria-valuemax="100" style="width: 100%"></div>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>   
+                                </div>
+                                <!--Formação de chat-->
+                                <div class='col-sm-12'>
+                                    <div class='form-row mt-4 mb-4'>
+                                        <div class='col-10'>
+                                            <!--Input de mensagem-->
+                                            <input type='text' id='text-message' class='form-control w-100' />
+                                        </div>
+                                        <div class='col text-right'>
+                                            <!--Botão de envio-->
+                                            <a id='send-message-btn' class='btn btn-info' style='width:100%;'><i class='fa fa-send text-light'></i></a>
+                                        </div>
+                                    </div>
+                                    <div class='card light-bg'>
+                                        <!--Output de mensagem-->
+                                        <textarea class='form-control bg-light' disabled rows='6' id='chat-panel'></textarea>
+                                    </div>
+                                </div>    
                             </div>
                         </div>
                         <div id='teacher-name' class='card-footer text-center'>
-                            <!--Teacher name here-->
+                            <!--Nome do professor-->
                         </div>
                     </div>
                 </div>
+                <!--Painel com os vídeos dos espectadores-->
                 <div class='col-sm-12 col-md-4' style='display:block;'>
                     <div id='class-video' class='inroom otherView'>
-                        <!--Other video here-->
+                        <!--Outros vídeos-->
                     </div>
-                </div> 
+                </div>
             </div> 
         </div>
     </div>

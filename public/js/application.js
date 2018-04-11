@@ -13,12 +13,30 @@ $(document).ready(function() {
     //Definição de elementos da conferência; Audio e Video
     connection.session = {
         audio: true,
-        video: true
+        video: true,
+        data: true
     }
     connection.sdpConstraints.mandatory = {
         OfferToReceiveAudio: true,
         OfferToReceiveVideo: true
     }
+
+    document.getElementById('text-message').onkeyup = function(e) {
+        //Se a tecla apertada não for ENTER -> não faça nada
+        if (e.keyCode != 13) return;
+        // Tratando entrada
+        this.value = this.value.replace(/^\s+|\s+$/g, '');
+        if (!this.value.length) return;
+        connection.send(this.value);
+        appendDIV(this.value);
+        this.value = '';
+    };
+
+    document.getElementById('send-message-btn').onclick = sendByClick();
+
+    connection.onmessage = appendDIV;
+
+
 
     document.getElementById('btn-join-as-teacher').onclick = function() {
         //Ação de criar uma sala de aula ao clicar em 'btn-join-as-teacher'
@@ -59,6 +77,7 @@ $(document).ready(function() {
             connection.onstream = function(event) {
                 //Verifica se a conexão é local ou remota
                 if (event.type === 'local') {
+                    connection.teacherVideosContainer.innerHTML = '';
                     //As definições de conexão local para um usuário do tipo professor são definidas por padrão com alta prioridade
                     connection.teacherVideosContainer.appendChild(event.mediaElement);
                     event.mediaElement.play();
@@ -76,6 +95,10 @@ $(document).ready(function() {
 
                     var width = parseInt(connection.teacherVideosContainer.clientWidth);
                     event.mediaElement.width = width;
+
+                    console.log('Stream: ' + event.mediaElement.id);
+                    connection.extra.modifiedValue = event.mediaElement.id;
+                    connection.updateExtraData();
                 } else {
                     //Conexões efetuadas a partir de um ponto remoto recebem tratamento de entradas de vídeo comuns
                     connection.classVideosContainer.appendChild(event.mediaElement);
@@ -94,9 +117,6 @@ $(document).ready(function() {
                     var width = parseInt(connection.classVideosContainer.clientWidth);
                     event.mediaElement.width = width;
                 }
-                console.log('Stream: ' + event.mediaElement.id);
-                connection.extra.modifiedValue = event.mediaElement.id;
-                connection.updateExtraData();
 
                 //Método secundário para a criação de elementos de audio/vídeo
                 /*
@@ -163,7 +183,6 @@ $(document).ready(function() {
                         "Assunto: " + labelMateria +
                         "</h5>" +
                         "<p class='card-text'>Acesse esta sala de aula clicando no botão ao lado.</p>" +
-                        "<p class='card-text'>" + +"</p>" +
                         "</div>" +
                         "<div id=" + moderator.userid + " class='col-sm-6 col-md-4 col-lg-3 text-center'>" +
                         "</div>" +
@@ -176,7 +195,7 @@ $(document).ready(function() {
                     button.id = moderator.userid;
                     button.className = 'btn btn-info';
 
-                    console.log(connection.userid + "||" + connection.sessionid);
+                    //console.log(connection.userid + "||" + connection.sessionid);
                     button.onclick = function() {
                         this.disabled = true;
                         var elem = document.getElementById(this.id);
@@ -196,7 +215,7 @@ $(document).ready(function() {
                             userVideo.controls = false;
 
                             //console.log(event.extra);
-                            console.log(owner);
+                            console.log(event.extra.modifiedValue);
                             console.log(event.mediaElement.id);
 
                             //Define se a conexão é local ou remota
@@ -210,6 +229,7 @@ $(document).ready(function() {
                                 }, 5000);
                                 var width = parseInt(connection.classVideosContainer.clientWidth);
                                 event.mediaElement.width = width;
+                                event.mediaElement.title = 'Minha CAM';
 
                                 /*
                                 userVideo.srcObject = event.stream;
@@ -225,26 +245,31 @@ $(document).ready(function() {
                                 */
 
                             } else {
-                                console.log(owner + "||" + event.mediaElement.id);
-                                if (owner != undefined) {
-                                    if (owner == event.mediaElement.id) {
-                                        connection.teacherVideosContainer.appendChild(event.mediaElement);
+                                //console.log(owner + "||" + event.mediaElement.id);
+
+                                if (event.extra.modifiedValue == event.mediaElement.id) {
+                                    connection.teacherVideosContainer.innerHTML = '';
+                                    connection.teacherVideosContainer.appendChild(event.mediaElement);
+                                    event.mediaElement.play();
+                                    setTimeout(function() {
                                         event.mediaElement.play();
-                                        setTimeout(function() {
-                                            event.mediaElement.play();
-                                        }, 5000);
-                                        var width = parseInt(connection.teacherVideosContainer.clientWidth);
-                                        event.mediaElement.width = width;
-                                    } else {
-                                        connection.classVideosContainer.appendChild(event.mediaElement);
+                                    }, 5000);
+                                    var width = parseInt(connection.teacherVideosContainer.clientWidth);
+                                    event.mediaElement.width = width;
+                                    event.mediaElement.title = labelClasse + ' (' + labelMateria + ')';
+                                    //} else if (event.extra.modifiedValue === undefined) {
+                                    //console.log('Waiting...');
+                                } else {
+                                    connection.classVideosContainer.appendChild(event.mediaElement);
+                                    event.mediaElement.play();
+                                    setTimeout(function() {
                                         event.mediaElement.play();
-                                        setTimeout(function() {
-                                            event.mediaElement.play();
-                                        }, 5000);
-                                        var width = parseInt(connection.classVideosContainer.clientWidth);
-                                        event.mediaElement.width = width;
-                                    }
+                                    }, 5000);
+                                    var width = parseInt(connection.classVideosContainer.clientWidth);
+                                    event.mediaElement.width = width;
+                                    event.mediaElement.title = event.mediaElement.id;
                                 }
+
 
 
                                 //event.mediaElement.elem = roomHash;
@@ -273,8 +298,6 @@ $(document).ready(function() {
                         // Se já estiver conectado na sala
                         button.disabled = true;
                     }
-                    //publicRoomsDiv.insertBefore(li, publicRoomsDiv.firstChild);
-                    //publicRoomsDiv.insertBefore(divOpen, publicRoomsDiv.firstChild);
                     publicRoomsDiv.appendChild(divOpen);
 
                     var divClose = document.getElementById(moderator.userid);
@@ -282,7 +305,7 @@ $(document).ready(function() {
                 });
             } else {
                 var divOpen = document.createElement('div');
-                var message = "<div class='light-bg text-center'>" +
+                var message = "<div class='light-bg text-center text-secondary h5 mt-5'>" +
                     "<i class='fa fa-times fa-lg text-danger'></i> Não há salas de aula disponíveis." +
                     "</div>";
                 divOpen.innerHTML = message;
@@ -382,13 +405,37 @@ function setRoomLabel(label) {
 function showRoomURL(roomid, className, classTheme) {
     var roomHashURL = '#' + roomid;
     var roomQueryStringURL = '?roomid=' + roomid;
-    var html = '<div class="card-title">Sua aula foi iniciada.</div>';
+    var html = '<div class="card-title h5"><i class="fa fa-desktop"></i> Aula iniciada.</div>';
+    /*
     html += '<div class="card-text">';
     html += '   Hash URL: <a href="' + roomHashURL + '" target="_blank">' + roomHashURL + '</a><br />';
     html += '   QueryString URL: <a href="' + roomQueryStringURL + '" target="_blank">' + roomQueryStringURL + '</a>';
     html += '</div>';
+    */
     var roomURLsDiv = document.getElementById('room-urls');
     roomURLsDiv.innerHTML = html;
     roomURLsDiv.style.display = 'block';
     callTeacherStream();
+}
+//Trata e escreve mensagem de chat
+function appendDIV(event) {
+
+    var chatContainer = document.getElementById('chat-panel');
+    var sender = document.getElementById('current-user').value;
+    var text = event.data || event;
+    var message = sender + ' diz: ' + text;
+
+    chatContainer.value += message + '\n';
+}
+
+function sendByClick() {
+    var value = document.getElementById('text-message').value;
+    if (value != '' && value != undefined) {
+        // Tratando entrada
+        value = value.replace(/^\s+|\s+$/g, '');
+        if (value.length) return;
+        connection.send(value);
+        appendDIV(value);
+        value.value = '';
+    }
 }
