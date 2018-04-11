@@ -19,7 +19,17 @@ class IndexController extends AbstractActionController
     }
     public function indexAction()
     {
+        //return new ViewModel();
+        $form = new \Application\Form\Login();
+
+        if($this->request->isPost()){
+            $form->setData($this->request->getPost());
+            
+            //Data here
+        }
         //$users = $this->table->fetchAll();
-        return new ViewModel();
+        return new viewModel([
+            'form' => $form
+        ]);
     }
 }

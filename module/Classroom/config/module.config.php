@@ -24,16 +24,7 @@ return [
                     ],
                 ],
             ],
-            'add' => [
-                'type'    => Segment::class,
-                'options' => [
-                    'route'    => '/classroom/add[/:action]',
-                    'defaults' => [
-                        'controller'    => Controller\IndexController::class,
-                        'action'        => 'addroom',
-                    ],
-                ],
-            ],
+            
         ],
     ],
     'controllers' => [

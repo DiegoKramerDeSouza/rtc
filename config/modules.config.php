@@ -18,8 +18,12 @@ return [
     'Zend\Db',
     'Zend\Router',
     'Zend\Validator',
+    'Zend\InputFilter',
+    'Zend\Filter',
+    'Zend\Hydrator',
     'ZendDeveloperTools',
     'Application',
     'Classroom',
     'User',
+
 ];

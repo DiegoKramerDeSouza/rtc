@@ -12,7 +12,7 @@ use Zend\Db\TableGateway\TableGateway;
 use Zend\Db\ResultSet\ResultSet;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 
-class Module
+class Module implements ConfigProviderInterface
 {
     const VERSION = '3.0.3-dev';
 
@@ -36,16 +36,20 @@ class Module
                     return new TableGateway('user', $adapater, null, $resultSetPrototype);
                 }
             ]
+
         ];
     }
+
     public function getControllerConfig()
     {
           return [
               'factories' => [
                   Controller\IndexController::class => function ($container) {
+
                       return new Controller\IndexController(
                           $container->get(Model\UserTable::class)
                       );
+
                   }
               ]
           ];

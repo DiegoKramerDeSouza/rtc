@@ -3,15 +3,15 @@ namespace User\Form;
 
 use Zend\Form\Form;
 
-Class Add extends Form {
+Class UserForm extends Form {
     public function __construct($name = null){
-        parent::__construct('add');
+        parent::__construct('user');
         $this->setAttribute('method', 'POST');
         $this->add([
             'name' => 'id',
             'type' => 'hidden',
             'attributes' => [
-                'id' => 'room-id'
+                'id' => 'id'
             ]
         ]);
         $this->add([
@@ -24,7 +24,7 @@ Class Add extends Form {
                 'id' => 'matricula',
                 'class' => 'form-control',
                 'placeholder' => 'Matrícula do usuário',
-                'required' => true
+                //'required' => true
             ]
 
         ]);
@@ -38,7 +38,7 @@ Class Add extends Form {
                 'id' => 'nome',
                 'class' => 'form-control',
                 'placeholder' => 'Nome do usuário',
-                'required' => true
+                //'required' => true
             ]
 
         ]);
@@ -52,7 +52,7 @@ Class Add extends Form {
                 'id' => 'senha',
                 'class' => 'form-control',
                 'placeholder' => 'Senha do usuário',
-                'required' => true
+                //'required' => true
             ]
 
         ]);
@@ -66,7 +66,7 @@ Class Add extends Form {
                 'id' => 'confirmsenha',
                 'class' => 'form-control',
                 'placeholder' => 'Confirme a senha do usuário',
-                'required' => true
+                //'required' => true
             ]
 
         ]);
@@ -80,7 +80,7 @@ Class Add extends Form {
                 'id' => 'email',
                 'class' => 'form-control',
                 'placeholder' => 'E-mail do usuário',
-                'required' => true
+                //'required' => true
             ]
 
         ]);
@@ -94,7 +94,7 @@ Class Add extends Form {
                 'id' => 'codescola',
                 'class' => 'form-control',
                 'placeholder' => 'Código da escola',
-                'required' => true
+                //'required' => true
             ]
 
         ]);
@@ -108,7 +108,7 @@ Class Add extends Form {
                 'id' => 'escola',
                 'class' => 'form-control',
                 'placeholder' => 'Nome da escola',
-                'required' => true
+                //'required' => true
             ]
 
         ]);
@@ -126,7 +126,7 @@ Class Add extends Form {
             'attributes' => [
                 'id' => 'grupo',
                 'class' => 'form-control',
-                'required' => true
+                //'required' => true
             ]
 
         ]);
@@ -135,7 +135,7 @@ Class Add extends Form {
             'type' => 'submit',
             'attributes' => [
                 'value' => 'Salvar usuário',
-                'id'    => 'saveuser',
+                'id'    => 'buttonSave',
                 'class' => 'btn btn-lg btn-success'
             ]
         ]);

@@ -19,19 +19,48 @@ class IndexController extends AbstractActionController
     }
 
     public function indexAction()
+    {  
+        $users = $this->table->fetchAll();
+        return new viewModel([
+            'users' => $users
+        ]);
+    }
+
+    public function addAction()
     {
         //return new ViewModel();
-        $form = new \User\Form\Add();
+        $form = new \User\Form\UserForm();
+        $request = $this->getRequest();
 
-        if($this->request->isPost()){
-            $form->setData($this->request->getPost());
+        if(! $request->isPost()){
+            //$form->setData($this->request->getPost());
+            return new viewModel([
+                'form' => $form
+            ]);
+        } else {
+            $user = new \User\Model\User();
             
-            //Data here
+            $form->setData($request->getPost());
+
+            //if(! $form->isValid()){
+                //Retorna mensagem de formulário inválido
+            //}
+
+            //Coleta dados do formulário e prepara a inserção no banco
+            $user->exchangeArray($form->getData());
+            //Salva usuário na base de dados
+            $this->table->saveUser($user);
+
+            return $this->redirect()->toRoute('user', [
+                'controller'    => 'index',
+                'action'        => 'add'
+            ]);
         }
 
-        return new viewModel([
-            'form' => $form
-        ]);
+        
+
+
+        
     }
     
 }

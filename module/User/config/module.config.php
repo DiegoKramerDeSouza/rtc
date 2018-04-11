@@ -14,23 +14,23 @@ use Zend\ServiceManager\Factory\InvokableFactory;
 return [
     'router' => [
         'routes' => [
-            'User' => [
+            'user' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route'    => '/user[/:action]',
+                    'route'    => '/user[/:action[/:id]]',
                     'defaults' => [
-                        'controller'    => Controller\IndexController::class,
-                        'action'        => 'index',
+                        'controller' => Controller\IndexController::class,
+                        'action'     => 'index',
                     ],
                 ],
             ],
             'add' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route'    => '/user/add[/:action]',
+                    'route'    => '/user[/:action]',
                     'defaults' => [
                         'controller'    => Controller\IndexController::class,
-                        'action'        => 'adduser',
+                        'action'        => 'add',
                     ],
                 ],
             ],
@@ -42,6 +42,9 @@ return [
         ],
     ],
     'view_manager' => [
+        'template_map' => [
+            'user/index/index' => __DIR__ . '/../view/user/index/index.phtml',
+        ],
         'template_path_stack' => [
             __DIR__ . '/../view',
         ],
