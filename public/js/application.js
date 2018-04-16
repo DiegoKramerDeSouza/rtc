@@ -2,6 +2,7 @@ $(document).ready(function() {
     //Application - Inicia a chamada e tratamento de multiconexão
     var connection = new RTCMultiConnection();
     var status = false;
+    var cameras;
 
     //Conexão com serviço de websocket
     //Servidor  de signaling gratúito https://rtcmulticonnection.herokuapp.com:443/
@@ -11,11 +12,21 @@ $(document).ready(function() {
 
 
     //Definição de elementos da conferência; Audio e Video
-    connection.session = {
-        audio: true,
-        video: true,
-        data: true
+    navigator.mediaDevices.enumerateDevices(getCameras);
+    if (cameras) {
+        connection.session = {
+            audio: true,
+            video: true,
+            data: true
+        }
+    } else {
+        connection.session = {
+            audio: true,
+            video: false,
+            data: true
+        }
     }
+
     connection.sdpConstraints.mandatory = {
         OfferToReceiveAudio: true,
         OfferToReceiveVideo: true
@@ -32,8 +43,16 @@ $(document).ready(function() {
         this.value = '';
     };
 
-    document.getElementById('send-message-btn').onclick = sendByClick();
-
+    document.getElementById('send-message-btn').onclick = function() {
+        // Tratando entrada
+        var texto = document.getElementById('text-message').value
+        texto = texto.replace(/^\s+|\s+$/g, '');
+        if (!texto.length) return;
+        connection.send(texto);
+        appendDIV(texto);
+        document.getElementById('text-message').value = '';
+    };
+    //Envio da mensagem
     connection.onmessage = appendDIV;
 
 
@@ -368,7 +387,12 @@ $(document).ready(function() {
 });
 
 //FUNCTIONS-----------------------------------------------------------------
-
+//Verifica a existência de dispositivos de vídeo
+function getCameras(sourceInfos) {
+    if (sourceInfos.length > 0) {
+        cameras = true;
+    }
+}
 //Verificação de classes para elementos html
 function hasClass(element, cls) {
     return (' ' + element.className + ' ').indexOf(' ' + cls + ' ') > -1;
@@ -426,16 +450,4 @@ function appendDIV(event) {
     var message = sender + ' diz: ' + text;
 
     chatContainer.value += message + '\n';
-}
-
-function sendByClick() {
-    var value = document.getElementById('text-message').value;
-    if (value != '' && value != undefined) {
-        // Tratando entrada
-        value = value.replace(/^\s+|\s+$/g, '');
-        if (value.length) return;
-        connection.send(value);
-        appendDIV(value);
-        value.value = '';
-    }
 }
